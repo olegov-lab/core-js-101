@@ -243,8 +243,11 @@ function findFirstSingleChar(str) {
  *   5, 3, true, true   => '[3, 5]'
  *
  */
-function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
-  throw new Error('Not implemented');
+function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
+ let left = isStartIncluded ? '[' : '(';
+ let right = isEndIncluded ? ']' : ')';
+ let inter = a < b ? `${a}, ${b}` : `${b}, ${a}`;
+ return `${left}${inter}${right}`;
 }
 
 
@@ -260,8 +263,8 @@ function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
  * 'rotator' => 'rotator'
  * 'noon' => 'noon'
  */
-function reverseString(/* str */) {
-  throw new Error('Not implemented');
+function reverseString(str) {
+  return str.split('').reverse().join('');
 }
 
 
@@ -277,8 +280,11 @@ function reverseString(/* str */) {
  *   87354 => 45378
  *   34143 => 34143
  */
-function reverseInteger(/* num */) {
-  throw new Error('Not implemented');
+function reverseInteger(num) {
+
+  let str = String(num);
+
+  return +str.split('').reverse().join('');
 }
 
 
@@ -302,8 +308,29 @@ function reverseInteger(/* num */) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  let sum = 0;
+  let arr = String(ccn).split('');
+
+for (let i = 0; i < arr.length; i++) {
+let cardNum = Number(arr[i]);
+
+if ( (arr.length - i) % 2 === 0) {
+  cardNum *= 2;
+
+if (cardNum > 9) {
+cardNum -= 9;
+}
+}
+
+sum += cardNum;
+  }
+
+  if (sum % 10 === 0) {
+    return true;
+  }
+
+  return false;
 }
 
 /**
@@ -320,8 +347,18 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  let arr = String(num).split('');
+
+  let arrNew = arr.map(item => Number(item));
+
+  let res = arrNew.reduce((sum, curr) => sum + curr);
+
+  if (res > 9) {
+    return getDigitalRoot(res);
+  }
+
+  return res;
 }
 
 
@@ -346,11 +383,42 @@ function getDigitalRoot(/* num */) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  let config = ['{', '[', '(', '<'];
+
+  let brackets = {
+    ']': '[',
+    ')': '(',
+    '}': '{',
+    '>': '<'
+  }
+
+
+let stack = [];
+
+for (let i = 0; i < str.length; i++) {
+
+  if (config.includes(str[i])) {
+    stack.push(str[i]);
+  } else {
+
+    if (stack.length === 0) {
+      return false;
+    }
+
+    if (brackets[str[i]] === stack[stack.length - 1]) {
+      stack.pop()
+    } else {
+      return false;
+    }
+
+  }
+
 }
 
+return stack.length === 0;
 
+};
 /**
  * Returns the string with n-ary (binary, ternary, etc, where n <= 10)
  * representation of specified number.
@@ -371,8 +439,8 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return num.toString(n);
 }
 
 
@@ -388,8 +456,25 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  let arr = pathes.map(item => item.split('/'));
+
+  for(let i = 0; i < arr.length; i++) {
+    for (let j = 0; j < arr[i].length; j++) {
+
+      if (arr[0][j] !== arr[i][j]) {
+        arr[0].splice(j);
+      }
+
+    }
+  }
+
+  if (arr[0].length === 0) {
+    return '';
+  }
+
+  return `${arr[0].join('/')}/`;
+
 }
 
 
@@ -411,8 +496,32 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  let rowsM1 = m1.length, colsM1 = m1[0].length,
+      rowsM2 = m2.length, colsM2 = m2[0].length,
+      m3 = [];
+
+if (colsM1 != rowsM2) {
+  return false;
+}
+
+for (let i = 0; i < rowsM1; i++) {
+  m3[i] = [];
+}
+
+for (let k = 0; k < colsM2; k++)
+{
+
+  for (let i = 0; i < rowsM1; i++)
+  {
+    let t = 0;
+    for (let j = 0; j < rowsM2; j++) t += m1[i][j] * m2[j][k];
+    m3[i][k] = t;
+  }
+
+}
+
+return m3;
 }
 
 
